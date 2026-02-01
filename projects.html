@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Submission Dashboard</title>
+    <style>
+        :root {
+            --primary: #2563eb; --short: #10b981; --medium: #f59e0b; --long: #ef4444;
+            --dark: #0f172a; --light: #f8fafc;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); color: var(--dark); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        
+        header { text-align: center; padding: 40px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
+
+        .category-header { 
+            display: flex; align-items: center; gap: 15px; margin-top: 40px; 
+            padding-bottom: 10px; border-bottom: 2px solid #e2e8f0;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px; margin-top: 20px;
+        }
+
+        /* Project Cards */
+        .card {
+            background: white; border-radius: 12px; padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: 0.2s; cursor: pointer; border: 1px solid transparent;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
+        .badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; color: white; text-transform: uppercase; }
+        .bg-15 { background: var(--short); }
+        .bg-2m { background: var(--medium); }
+        .bg-5m { background: var(--long); }
+
+        /* Modal / Detail View */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); z-index: 1000;
+        }
+        .modal-content {
+            background: white; width: 90%; max-width: 800px; margin: 5vh auto;
+            border-radius: 20px; padding: 40px; position: relative; max-height: 85vh; overflow-y: auto;
+        }
+        .close-btn { position: absolute; right: 25px; top: 20px; font-size: 28px; cursor: pointer; color: #94a3b8; }
+
+        .insight-box { background: #f1f5f9; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid var(--primary); }
+        
+        /* Upload Area */
+        .upload-section {
+            margin-top: 30px; border: 2px dashed #cbd5e1; padding: 30px;
+            text-align: center; border-radius: 12px; background: #fafafa;
+        }
+        .file-input { display: none; }
+        .upload-btn {
+            background: var(--dark); color: white; padding: 12px 24px;
+            border-radius: 6px; cursor: pointer; display: inline-block; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>My Project Master Hub</h1>
+        <p>17 Problem Statements & Solution Submissions</p>
+    </header>
+
+    <div class="category-header">
+        <span class="badge bg-15">Mini-Projects</span>
+        <h2>15-Day Sprint Challenges</h2>
+    </div>
+    <div class="project-grid" id="sprint-grid"></div>
+
+    <div class="category-header">
+        <span class="badge bg-2m">Mid-Range</span>
+        <h2>2-Month Development Cycles</h2>
+    </div>
+    <div class="project-grid" id="mid-grid"></div>
+
+    <div class="category-header">
+        <span class="badge bg-5m">Capstone</span>
+        <h2>5-Month Heavyweight Projects</h2>
+    </div>
+    <div class="project-grid" id="long-grid"></div>
+</div>
+
+<div id="projectModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle" style="color: var(--primary);"></h2>
+        <p id="modalProblem" style="font-style: italic; color: #64748b; font-size: 1.1rem;"></p>
+        
+        <div class="insight-box">
+            <h4>💡 Project Insights & Highlights</h4>
+            <ul id="modalInsights"></ul>
+        </div>
+
+        <div class="upload-section">
+            <h3>Ready to Submit?</h3>
+            <p>Upload your repository link or documentation (ZIP/PDF)</p>
+            <label class="upload-btn">
+                Choose Files
+                <input type="file" class="file-input" onchange="alert('Files prepared for submission!')">
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Project Data Structure
+    const projects = [
+        // 9 MINI PROJECTS (15 Days)
+        { id: 1, duration: '15 Days', type: '15', title: 'Task Manager Lite', problem: 'Users forget daily small tasks without a simple nudging system.', insights: ['LocalStorage usage', 'DOM Manipulation', 'Event Listeners'] },
+        { id: 2, duration: '15 Days', type: '15', title: 'Weather Dashboard', problem: 'Standard apps are too cluttered with ads for simple checks.', insights: ['OpenWeather API', 'Asynchronous JS', 'CSS Flexbox'] },
+        { id: 3, duration: '15 Days', type: '15', title: 'Markdown Previewer', problem: 'Writers need a quick way to see formatted text while typing.', insights: ['Regex', 'Markdown Parsing', 'State Management'] },
+        { id: 4, duration: '15 Days', type: '15', title: 'Unit Converter', problem: 'Engineers need instant custom unit conversions.', insights: ['Math Logic', 'Input Validation'] },
+        { id: 5, duration: '15 Days', type: '15', title: 'Pomodoro Timer', problem: 'Productivity drops without structured break intervals.', insights: ['SetInterval logic', 'Audio triggers'] },
+        { id: 6, duration: '15 Days', type: '15', title: 'Password Generator', problem: 'Users reuse weak passwords across multiple sites.', insights: ['Security logic', 'Clipboard API'] },
+        { id: 7, duration: '15 Days', type: '15', title: 'Expense Tracker', problem: 'Tracking small cash expenses is tedious.', insights: ['Array filtering', 'Data persistence'] },
+        { id: 8, duration: '15 Days', type: '15', title: 'Portfolio Site v1', problem: 'Developers need a single source of truth for their work.', insights: ['HTML/CSS Semantics', 'Responsive Design'] },
+        { id: 9, duration: '15 Days', type: '15', title: 'Random Quote Machine', problem: 'Social media users need quick content for inspiration.', insights: ['Fetch API', 'Social sharing integration'] },
+
+        // 5 MID-RANGE (2 Months)
+        { id: 10, duration: '2 Months', type: '2m', title: 'Inventory Management', problem: 'Small shops lose track of expiry dates and stock levels.', insights: ['Full CRUD', 'Database Schema', 'Auth Patterns'] },
+        { id: 11, duration: '2 Months', type: '2m', title: 'Blogging Platform', problem: 'Traditional platforms take too much commission from creators.', insights: ['Rich Text Editors', 'SEO Optimization', 'NoSQL'] },
+        { id: 12, duration: '2 Months', type: '2m', title: 'Fitness Tracker App', problem: 'Users quit because apps don\'t personalize workout difficulty.', insights: ['User Data Analytics', 'Chart.js integration'] },
+        { id: 13, duration: '2 Months', type: '2m', title: 'Chat Application', problem: 'Teams need a private, secure way to discuss projects.', insights: ['WebSockets', 'Real-time sync', 'Socket.io'] },
+        { id: 14, duration: '2 Months', type: '2m', title: 'E-commerce Frontend', problem: 'Mobile shopping experiences are often slow and laggy.', insights: ['React/Vue', 'Performance tuning', 'Payment APIs'] },
+
+        // 3 CAPSTONE (5 Months)
+        { id: 15, duration: '5 Months', type: '5m', title: 'AI Recruitment Engine', problem: 'HR managers face "Resume Fatigue" during mass hiring.', insights: ['Machine Learning Models', 'NLP Analysis', 'Scalable Backend'] },
+        { id: 16, duration: '5 Months', type: '5m', title: 'Blockchain Supply Chain', problem: 'Global logistics lack transparency in high-value goods.', insights: ['Smart Contracts', 'Solidity', 'Decentralized Data'] },
+        { id: 17, duration: '5 Months', type: '5m', title: 'Micro-Learning LMS', problem: 'Course completion rates are low due to long-form content.', insights: ['Video streaming logic', 'Gamification engines', 'Full DevOps CI/CD'] }
+    ];
+
+    function loadProjects() {
+        projects.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => openModal(p);
+            card.innerHTML = `
+                <span class="badge bg-${p.type}">${p.duration}</span>
+                <h3>${p.title}</h3>
+                <p style="font-size: 0.9rem; color: #64748b;">${p.problem.substring(0, 60)}...</p>
+            `;
+            
+            if(p.type === '15') document.getElementById('sprint-grid').appendChild(card);
+            else if(p.type === '2m') document.getElementById('mid-grid').appendChild(card);
+            else document.getElementById('long-grid').appendChild(card);
+        });
+    }
+
+    function openModal(project) {
+        document.getElementById('modalTitle').innerText = project.title;
+        document.getElementById('modalProblem').innerText = `Problem: "${project.problem}"`;
+        const list = document.getElementById('modalInsights');
+        list.innerHTML = project.insights.map(i => `<li>${i}</li>`).join('');
+        document.getElementById('projectModal').style.display = 'block';
+    }
+
+    function closeModal() { document.getElementById('projectModal').style.display = 'none'; }
+    window.onclick = (e) => { if(e.target.className === 'modal') closeModal(); }
+    
+    window.onload = loadProjects;
+</script>
+
+</body>
+</html>

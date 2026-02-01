@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | CrediSkill</title>
+    <link rel="icon" type="image/png" href="LOGO-removebg-preview.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .nav-link { position: relative; transition: all 0.3s; }
+        .nav-link.active { color: #2563eb; }
+        .nav-link.active::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: #2563eb;
+        }
+        .review-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .review-card:hover { transform: translateY(-5px); }
+        
+        /* Floating Animation for the Intro Logo */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-[#FBFDFF] text-slate-900">
+
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-10">
+                <div class="flex items-center gap-3">
+                    <img src="LOGO-removebg-preview.png" alt="CrediSkill" class="w-12 h-12 object-contain">
+                    <span class="text-xl font-extrabold tracking-tight text-slate-800">Credi<span class="text-blue-600">Skill</span></span>
+                </div>
+                <div class="hidden lg:flex items-center gap-8 font-bold text-slate-500 text-[13px] tracking-widest">
+                    <a href="home.html" class="nav-link active">HOME</a>
+                    <a href="dashboard.html" class="nav-link">DASHBOARD</a>
+                    <a href="tasks.html" class="nav-link">TASKS</a>
+                    <a href="projects.html" class="nav-link">PROJECTS</a>
+                    <a href="hiring.html" class="nav-link">HIRING</a>
+                    <a href="ats.html" class="nav-link">ATS</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-5">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="w-10 h-10 rounded-xl bg-blue-50 border border-slate-100">
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        
+        <section class="grid lg:grid-cols-2 gap-12 items-center mb-32 pt-10">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    Revolutionizing Skill Verification
+                </div>
+                <h1 class="text-6xl font-black text-slate-900 leading-[1.1] mb-6">
+                    Skills are the new <span class="text-blue-600">Global Currency.</span>
+                </h1>
+                <p class="text-slate-500 text-xl leading-relaxed mb-10 max-w-lg">
+                    CrediSkill bridges the gap between what you've learned and what the industry needs. Get verified by doing, not just studying.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="window.location.href='tasks.html'" class="bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-3">
+                        Get Started <i data-lucide="chevron-right"></i>
+                    </button>
+                    <button class="bg-white text-slate-700 border border-slate-200 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all">
+                        How it works
+                    </button>
+                </div>
+            </div>
+            <div class="relative flex justify-center items-center">
+                <div class="absolute w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+                <div class="relative z-10 animate-float">
+                    <img src="LOGO-removebg-preview.png" alt="CrediSkill Intro Logo" class="w-full max-w-md drop-shadow-[0_35px_35px_rgba(37,99,235,0.2)]">
+                </div>
+            </div>
+        </section>
+
+
+        <section class="mb-24">
+            <div class="text-center mb-16">
+                <span class="text-blue-600 font-bold tracking-[0.2em] uppercase text-xs">Testimonials</span>
+                <h2 class="text-4xl font-black text-slate-900 mt-2">Verified Success Stories</h2>
+                <p class="text-slate-500 mt-4">See how CrediSkill is changing lives by focusing on what people can actually do.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="review-card bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm relative">
+                    <div class="flex gap-1 text-orange-400 mb-6">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed mb-8 font-medium">"I had no fancy degree, but my 980 Skill Score on CrediSkill got me an interview at a top-tier FinTech firm."</p>
+                    <div class="flex items-center gap-4 border-t border-slate-50 pt-6">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan" class="w-12 h-12 rounded-full bg-slate-100">
+                        <div>
+                            <h4 class="font-bold text-slate-900">Jordan Smith</h4>
+                            <p class="text-xs font-bold text-blue-500 uppercase">Full Stack Developer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card bg-slate-900 p-8 rounded-[2rem] text-white shadow-xl relative overflow-hidden">
+                    <img src="LOGO-removebg-preview.png" class="absolute right-[-20%] bottom-[-10%] w-32 opacity-10">
+                    <div class="flex gap-1 text-emerald-400 mb-6">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed mb-8 font-medium">"As a recruiter, CrediSkill is a cheat code. It has reduced our bad-hire rate by 60%."</p>
+                    <div class="flex items-center gap-4 border-t border-white/10 pt-6">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-12 h-12 rounded-full bg-slate-800">
+                        <div>
+                            <h4 class="font-bold">Sarah Jenkins</h4>
+                            <p class="text-xs font-bold text-emerald-400 uppercase">HR Director @ TechFlow</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm relative">
+                    <div class="flex gap-1 text-orange-400 mb-6">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed mb-8 font-medium">"Earning that 'Verified Expert' badge felt better than my actual graduation ceremony."</p>
+                    <div class="flex items-center gap-4 border-t border-slate-50 pt-6">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus" class="w-12 h-12 rounded-full bg-slate-100">
+                        <div>
+                            <h4 class="font-bold text-slate-900">Marcus Wright</h4>
+                            <p class="text-xs font-bold text-blue-500 uppercase">Product Designer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </section> <hr style="height: 10px;">
+
+        <section class="mb-32">
+    <div class="text-center mb-12">
+        <span class="text-blue-600 font-bold tracking-[0.2em] uppercase text-xs">Partnerships</span>
+        <h2 class="text-4xl font-black text-slate-900 mt-2">Trusted by Industry Leaders</h2>
+    </div><br><br>
+
+    <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-10 opacity-60 grayscale hover:grayscale-0 transition-all duration-500 px-6 max-w-5xl mx-auto">
+        
+        <div class="h-8 md:h-10 w-28 md:w-32 flex items-center justify-center">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAb0zCsPzg-rGGNn-6poaFGGFF9wiUaXWy1Q&s" 
+                 alt="Zepto" class="max-h-full max-w-full object-contain hover:scale-110 transition-transform">
+        </div>
+
+        <div class="h-8 md:h-10 w-28 md:w-32 flex items-center justify-center">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb-ahvU0VGj09yeLDAg_oTNgNzL2P6vC7emQ&s" 
+                 alt="CRED" class="max-h-full max-w-full object-contain hover:scale-110 transition-transform">
+        </div>
+
+        <div class="h-8 md:h-10 w-28 md:w-32 flex items-center justify-center">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1TGJj57rkoYUS44PD-lXFVXzpNBiy_N49Sw&s" 
+                 alt="Swiggy" class="max-h-full max-w-full object-contain hover:scale-110 transition-transform">
+        </div>
+
+        <div class="flex items-center gap-2 hover:scale-110 transition-transform h-8 md:h-10">
+            <img src="https://avatars.githubusercontent.com/u/67429002?s=200&v=4" 
+                 alt="Refyne" class="h-full rounded-lg">
+            <span class="font-bold text-xl tracking-tighter text-slate-800">Refyne</span>
+        </div>
+
+        <div class="h-8 md:h-10 w-28 md:w-32 flex items-center justify-center">
+            <img src="https://media.licdn.com/dms/image/v2/C560BAQGaQEoRI8-dFw/company-logo_200_200/company-logo_200_200/0/1630655211617/appsforbharat_logo?e=2147483647&v=beta&t=_UOCbmbrT9G7sFJohKW3XOGfZO_0YFgP2OerwyY5W3U" 
+                 alt="AppsForBharat" class="max-h-full max-w-full object-contain rounded-md hover:scale-110 transition-transform">
+        </div>
+
+        <div class="h-8 md:h-10 flex items-center justify-center">
+            <span class="text-2xl font-black italic text-slate-700 tracking-tighter hover:scale-110 transition-transform">SNABBIT</span>
+        </div>
+    </div>
+</section>
+
+    </main> <hr style="size: 30px;">
+        <footer class="bg-white border-t border-slate-100 pt-20 pb-10 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="LOGO-removebg-preview.png" alt="CrediSkill" class="w-10 h-10 object-contain">
+                        <span class="text-xl font-extrabold tracking-tight text-slate-800">Credi<span class="text-blue-600">Skill</span></span>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                        The world's first verification engine designed to bridge the gap between education and employment through proof of work.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-slate-600 text-sm font-medium">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-600"></i>
+                            <span>cognixtechteam@crediskill.com</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-600 text-sm font-medium">
+                            <i data-lucide="phone" class="w-4 h-4 text-blue-600"></i>
+                            <span>+91 34 5612 9076</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-600 text-sm font-medium">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
+                            <span>Amaravathi, Andhra Pradesh, India
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-6 uppercase text-xs tracking-widest">Platform</h4>
+                    <ul class="space-y-4 text-sm font-semibold text-slate-500">
+                        <li><a href="tasks.html" class="hover:text-blue-600 transition">Skill Tasks</a></li>
+                        <li><a href="projects.html" class="hover:text-blue-600 transition">Industry Projects</a></li>
+                        <li><a href="hiring.html" class="hover:text-blue-600 transition">Hiring Partners</a></li>
+                        <li><a href="ats.html" class="hover:text-blue-600 transition">ATS Integration</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-6 uppercase text-xs tracking-widest">Support</h4>
+                    <ul class="space-y-4 text-sm font-semibold text-slate-500">
+                        <li><a href="#" class="hover:text-blue-600 transition">Help Center</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Verify Certificate</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-6 uppercase text-xs tracking-widest">Connect With Us</h4>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition shadow-sm">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition shadow-sm">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-blue-800 hover:text-white transition shadow-sm">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    <div class="mt-8 bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                        <p class="text-xs font-bold text-blue-700 leading-tight">Join 20,000+ pros on our weekly newsletter.</p>
+                        <div class="mt-3 flex gap-2">
+                            <input type="email" placeholder="Email" class="w-full bg-white px-3 py-2 rounded-lg text-xs border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-400 text-xs font-medium">
+                    &copy; 2026 CrediSkill Inc. All rights reserved. Built for a skill-first world.
+                </p>
+                <div class="flex gap-6 text-xs font-bold text-slate-400">
+                    <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3 h-3 text-emerald-500"></i> SOC2 Certified</span>
+                    <span class="flex items-center gap-1"><i data-lucide="globe" class="w-3 h-3 text-blue-500"></i> English (US)</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

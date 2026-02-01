@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrediSkill | Professional Assessment</title>
+    <style>
+        :root { --primary: #2563eb; --danger: #ef4444; --success: #10b981; --dark: #0f172a; --bg: #f8fafc; --gray: #64748b; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: var(--dark); overflow-x: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .hidden { display: none !important; }
+
+        /* Navigation */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: white; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .logo { font-weight: 800; font-size: 1.4rem; }
+        .logo span { color: var(--primary); }
+        .stat-pill { background: #f1f5f9; padding: 8px 16px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; border: 1px solid #e2e8f0; margin-left: 10px; }
+        .strike-pill { color: var(--danger); border-color: #fecaca; }
+
+        /* Grid System */
+        .section-title { margin: 40px 0 20px; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); display: flex; align-items: center; gap: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        /* Task Cards */
+        .card { background: white; padding: 25px; border-radius: 24px; border: 1px solid #e2e8f0; transition: all 0.3s ease; position: relative; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        
+        /* Status Styles */
+        .card.failed { border: 2px solid var(--danger); background: #fff1f2; opacity: 0.8; }
+        .card.failed::after { content: "VOID / STRIKE"; position: absolute; top: 15px; right: 15px; color: var(--danger); font-size: 0.6rem; font-weight: 900; border: 1px solid var(--danger); padding: 2px 6px; border-radius: 4px; }
+        .card.completed { border: 2px solid var(--success); background: #f0fdf4; opacity: 0.8; }
+        .card.completed::after { content: "PASSED"; position: absolute; top: 15px; right: 15px; color: var(--success); font-size: 0.6rem; font-weight: 900; border: 1px solid var(--success); padding: 2px 6px; border-radius: 4px; }
+        
+        .btn-start { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        .btn-start:hover { background: #1d4ed8; }
+
+        /* Workspace */
+        .workspace { display: grid; grid-template-columns: 350px 1fr; gap: 30px; animation: slideUp 0.4s ease-out; }
+        .panel { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .timer { font-size: 3.5rem; font-weight: 900; color: var(--danger); text-align: center; font-family: 'Courier New', monospace; margin: 20px 0; }
+        textarea { width: 100%; height: 400px; background: #0f172a; color: #38bdf8; padding: 25px; border-radius: 15px; font-family: 'Fira Code', monospace; border: none; resize: none; outline: none; font-size: 14px; line-height: 1.6; }
+
+        .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="banOverlay" class="ban-screen hidden">
+        <div style="padding: 20px;">
+            <h1 style="color:var(--danger); font-size: 3.5rem; margin-bottom: 0;">ACCESS DENIED</h1>
+            <p style="color: var(--gray); font-size: 1.2rem; margin-top: 10px;">Account deactivated after 5/5 Integrity Violations.</p>
+            <button onclick="localStorage.clear(); location.reload();" style="margin-top:40px; background:transparent; border: 1px solid #333; color: #444; padding: 10px 20px; cursor: pointer; border-radius: 8px;">(Admin Reset for Testing)</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">Credi<span>Skill</span></div>
+            <div>
+                <span class="stat-pill">Monthly: <span id="compStat">0/5</span></span>
+                <span class="stat-pill strike-pill">Strikes: <span id="strikeStat">0/5</span></span>
+            </div>
+        </nav>
+
+        <section id="selectionView">
+            <h2 class="section-title"><span style="color:var(--success)">●</span> Simple Programs (15m)</h2>
+            <div id="grid-easy" class="grid"></div>
+
+            <h2 class="section-title"><span style="color:#f59e0b">●</span> Medium Challenges (25m)</h2>
+            <div id="grid-medium" class="grid"></div>
+
+            <h2 class="section-title"><span style="color:var(--danger)">●</span> Difficult Architectures (45m)</h2>
+            <div id="grid-hard" class="grid"></div>
+        </section>
+
+        <section id="workspaceView" class="hidden">
+            <div class="workspace">
+                <div class="panel">
+                    <h2 id="currentTaskTitle" style="margin-top: 0;">Task</h2>
+                    <div id="timer" class="timer">15:00</div>
+                    <div style="background:#fff1f2; color:var(--danger); padding:15px; border-radius:12px; font-size:0.8rem; border:1px solid #fecaca; font-weight: 600;">
+                        PROCTORING ACTIVE: Losing window focus or switching tabs will result in a strike.
+                    </div>
+                </div>
+                <div class="panel" style="background:#1e293b;">
+                    <textarea id="editor" spellcheck="false"></textarea>
+                    <button id="submitBtn" onclick="submitTask()" style="width:100%; padding:18px; background:var(--success); color:white; border:none; border-radius:15px; font-weight:800; cursor:pointer; margin-top:20px; font-size: 1rem;">SUBMIT SOLUTION</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const taskLib = {
+            easy: Array.from({length: 10}, (_, i) => ({ id: `e${i+1}`, name: `Simple Logic #${i+1}`, time: 15, code: `// Easy Task: Return the square of x\nfunction square(x) {\n  return x * x;\n}` })),
+            medium: Array.from({length: 5}, (_, i) => ({ id: `m${i+1}`, name: `Data Processor #${i+1}`, time: 25, code: `// Medium Task: Filter even numbers\nfunction filterEven(arr) {\n  return arr.filter(n => n % 2 === 0);\n}` })),
+            hard: Array.from({length: 3}, (_, i) => ({ id: `h${i+1}`, name: `Architecture #${i+1}`, time: 45, code: `// Hard Task: Implement Singleton Pattern\nclass Database {\n  constructor() {\n    // logic here\n  }\n}` }))
+        };
+
+        let strikes = parseInt(localStorage.getItem('cs_strikes') || 0);
+        let completedCount = parseInt(localStorage.getItem('cs_completed') || 0);
+        let failedIds = JSON.parse(localStorage.getItem('cs_failed_ids') || "[]");
+        let doneIds = JSON.parse(localStorage.getItem('cs_done_ids') || "[]");
+        let proctoringActive = false;
+        let activeTaskId = null;
+        let timerInterval = null;
+
+        window.onload = () => {
+            if(localStorage.getItem('cs_banned')) document.getElementById('banOverlay').classList.remove('hidden');
+            renderUI();
+        };
+
+        function renderUI() {
+            document.getElementById('compStat').innerText = `${completedCount}/5`;
+            
+            // Success Mode Trigger
+            const isSuccessMode = (completedCount >= 5);
+            
+            // UI Reset: Show 0 strikes if goal reached
+            document.getElementById('strikeStat').innerText = `${isSuccessMode ? 0 : strikes}/5`;
+            
+            ['easy','medium','hard'].forEach(type => {
+                const container = document.getElementById(`grid-${type}`);
+                container.innerHTML = '';
+                taskLib[type].forEach(task => {
+                    
+                    // IF SUCCESS MODE: Everything is visually new (No "Passed" green borders)
+                    const isDoneVisually = isSuccessMode ? false : doneIds.includes(task.id);
+                    const isFailedVisually = isSuccessMode ? false : failedIds.includes(task.id);
+                    
+                    // In Success mode, every button says "Start Task" even if they passed it before
+                    const canStart = true; 
+
+                    container.innerHTML += `
+                        <div class="card ${isFailedVisually ? 'failed' : ''} ${isDoneVisually ? 'completed' : ''}">
+                            <h3 style="margin: 0 0 10px 0;">${task.name}</h3>
+                            <span style="font-size: 0.7rem; font-weight: 800; color: var(--gray);">${task.time} MINS</span>
+                            ${canStart ? `<button class="btn-start" onclick="openWorkspace('${type}', '${task.id}')">Start Task</button>` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function openWorkspace(type, id) {
+            const task = taskLib[type].find(t => t.id === id);
+            activeTaskId = id;
+            document.getElementById('selectionView').classList.add('hidden');
+            document.getElementById('workspaceView').classList.remove('hidden');
+            document.getElementById('currentTaskTitle').innerText = task.name;
+            document.getElementById('editor').value = task.code;
+            document.getElementById('timer').innerText = task.time + ":00";
+            
+            let timeSec = task.time * 60;
+            timerInterval = setInterval(() => {
+                timeSec--;
+                let m = Math.floor(timeSec / 60);
+                let s = timeSec % 60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if(timeSec <= 0) handleEnd(false, "TIME EXPIRED");
+            }, 1000);
+
+            setTimeout(() => { proctoringActive = true; }, 2000);
+        }
+
+        window.onblur = () => { if(proctoringActive) handleEnd(false, "STRIKE: Window focus lost."); };
+
+        function handleEnd(success, reason) {
+            proctoringActive = false;
+            clearInterval(timerInterval);
+            
+            if(!success) {
+                strikes++;
+                if(!failedIds.includes(activeTaskId)) failedIds.push(activeTaskId);
+                localStorage.setItem('cs_strikes', strikes);
+                localStorage.setItem('cs_failed_ids', JSON.stringify(failedIds));
+                alert(reason);
+                if(strikes >= 5) localStorage.setItem('cs_banned', 'true');
+            } else {
+                completedCount++;
+                if(!doneIds.includes(activeTaskId)) doneIds.push(activeTaskId);
+                
+                // Clear failure if it was fixed
+                failedIds = failedIds.filter(id => id !== activeTaskId);
+                
+                localStorage.setItem('cs_completed', completedCount);
+                localStorage.setItem('cs_done_ids', JSON.stringify(doneIds));
+                localStorage.setItem('cs_failed_ids', JSON.stringify(failedIds));
+                alert("SUCCESS: Task data verified.");
+            }
+            location.reload();
+        }
+
+        function submitTask() {
+            proctoringActive = false;
+            handleEnd(true);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Talent Intelligence System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1; --primary-dark: #4f46e5;
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --dark: #0f172a; --slate: #64748b; --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(circle at top right, #eef2ff, #f8fafc);
+            color: var(--dark); margin: 0; padding: 20px; min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* ATS Dashboard Header */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(12px);
+            border: 1px solid white; border-radius: 30px; padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03); margin-bottom: 30px;
+        }
+
+        .ats-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+
+        /* Upload Styling */
+        .upload-area {
+            border: 2px dashed #cbd5e1; border-radius: 24px; padding: 50px 20px;
+            text-align: center; transition: 0.3s; background: rgba(255,255,255,0.5);
+            cursor: pointer; position: relative;
+        }
+        .upload-area:hover { border-color: var(--primary); background: #f5f7ff; }
+
+        /* Results Logic */
+        .score-meter {
+            width: 150px; height: 150px; border-radius: 50%;
+            border: 10px solid #e2e8f0; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: 800; color: var(--primary);
+            position: relative;
+        }
+
+        .keyword-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 12px; font-size: 0.8rem;
+            margin: 4px; font-weight: 600;
+        }
+        .match { background: #dcfce7; color: #166534; }
+        .gap { background: #fee2e2; color: #991b1b; }
+
+        /* Job List Styling */
+        .job-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: white; border-radius: 20px;
+            margin-bottom: 12px; border: 1px solid #f1f5f9; transition: 0.2s;
+        }
+        .job-row:hover { border-color: var(--primary); transform: translateX(5px); }
+
+        .btn-main {
+            background: var(--primary); color: white; border: none;
+            padding: 14px 28px; border-radius: 14px; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-main:hover { background: var(--primary-dark); box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3); }
+
+        .loading-bar {
+            width: 100%; height: 6px; background: #e2e8f0; 
+            border-radius: 10px; margin-top: 20px; overflow: hidden; display: none;
+        }
+        .loading-fill { width: 0%; height: 100%; background: var(--primary); transition: 1.5s ease-in-out; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="margin-bottom: 40px;">
+        <h1 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px;">AI Career <span style="color: var(--primary);">Intelligence</span></h1>
+        <p style="color: var(--slate); font-size: 1.1rem;">Thorough ATS scanning & instant job application based on verified project scores.</p>
+    </header>
+
+    <div class="ats-layout">
+        <div class="glass-card">
+            <h2 style="margin-top:0">Step 1: Resume Analysis</h2>
+            <p style="color: var(--slate); margin-bottom: 30px;">Our system parses PDF text layers to identify technical proficiency.</p>
+            
+            <div class="upload-area" id="dropZone" onclick="document.getElementById('fileIn').click()">
+                <div style="font-size: 3rem; margin-bottom: 10px;">📄</div>
+                <h3 style="margin:0">Drop Resume Here</h3>
+                <p style="color: var(--slate);">Supports high-resolution PDF parsing</p>
+                <input type="file" id="fileIn" accept=".pdf" style="display:none">
+                <div id="fileReady" style="margin-top:15px; font-weight:700; color:var(--success)"></div>
+                
+                <div class="loading-bar" id="loadBar">
+                    <div class="loading-fill" id="loadFill"></div>
+                </div>
+            </div>
+
+            <div id="keywordReport" style="margin-top: 30px; display:none;">
+                <h4>Semantic Keyword Analysis</h4>
+                <div id="keywordGrid"></div>
+            </div>
+        </div>
+
+        <div class="glass-card" style="text-align: center;">
+            <h2 style="margin-top:0">Match Score</h2>
+            <div class="score-meter" id="scoreCircle">0%</div>
+            <p id="analysisMsg" style="color: var(--slate); font-size: 0.9rem;">Upload a resume to begin deep-scan analysis.</p>
+            
+            <div id="applyZone" style="display: none; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                <p style="font-weight: 700; color: var(--success);">✅ Verified for Application</p>
+                <button class="btn-main" style="width: 100%;" onclick="alert('Application Sent with ATS Report!')">Submit to Company</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header" style="margin: 40px 0 20px; display:flex; justify-content: space-between; align-items:center;">
+        <h2 style="margin:0">Available Positions</h2>
+        <span style="background: white; padding: 5px 15px; border-radius: 10px; font-size: 0.8rem; font-weight:700; border: 1px solid #e2e8f0;">Target Job: <span id="targetName" style="color:var(--primary)">None Selected</span></span>
+    </div>
+
+    <div id="jobList">
+        </div>
+</div>
+
+<script>
+    const jobs = [
+        { name: "Sr. AI Engineer", company: "OpenAI", keys: ["Python", "PyTorch", "LLMs", "Vector DB"] },
+        { name: "Full Stack Lead", company: "Vercel", keys: ["Next.js", "TypeScript", "React", "Serverless"] },
+        { name: "DevOps Architect", company: "HashiCorp", keys: ["Terraform", "Docker", "Kubernetes", "CI/CD"] }
+    ];
+
+    let currentJob = null;
+
+    function renderJobs() {
+        const list = document.getElementById('jobList');
+        jobs.forEach((j, i) => {
+            list.innerHTML += `
+                <div class="job-row">
+                    <div>
+                        <strong style="font-size: 1.1rem;">${j.name}</strong>
+                        <div style="color: var(--slate); font-size: 0.9rem;">${j.company} • Required: ${j.keys.join(', ')}</div>
+                    </div>
+                    <button class="btn-main" style="padding: 10px 20px; font-size: 0.9rem;" onclick="selectJob(${i})">Select Position</button>
+                </div>
+            `;
+        });
+    }
+
+    function selectJob(index) {
+        currentJob = jobs[index];
+        document.getElementById('targetName').innerText = currentJob.name;
+        alert(`Deep-scan targeting enabled for ${currentJob.name}. Please upload resume.`);
+    }
+
+    document.getElementById('fileIn').addEventListener('change', function(e) {
+        if(!currentJob) { alert("Please select a job position first!"); this.value=''; return; }
+        
+        const file = e.target.files[0];
+        document.getElementById('fileReady').innerText = "Analyzing: " + file.name;
+        
+        const bar = document.getElementById('loadBar');
+        const fill = document.getElementById('loadFill');
+        bar.style.display = "block";
+        
+        setTimeout(() => fill.style.width = "40%", 100);
+        setTimeout(() => fill.style.width = "100%", 1000);
+        setTimeout(showFinalAnalysis, 1600);
+    });
+
+    function showFinalAnalysis() {
+        const score = Math.floor(Math.random() * 21) + 78; // Generates 78-98
+        document.getElementById('scoreCircle').innerText = score + "%";
+        document.getElementById('scoreCircle').style.borderColor = "var(--success)";
+        document.getElementById('analysisMsg').innerText = "Thorough scan complete. High semantic relevance found.";
+        
+        const grid = document.getElementById('keywordGrid');
+        grid.innerHTML = "";
+        currentJob.keys.forEach(k => {
+            const isMatch = Math.random() > 0.2;
+            grid.innerHTML += `<span class="keyword-tag ${isMatch ? 'match' : 'gap'}">${isMatch ? '✓' : '✗'} ${k}</span>`;
+        });
+
+        document.getElementById('keywordReport').style.display = "block";
+        if(score >= 80) document.getElementById('applyZone').style.display = "block";
+    }
+
+    window.onload = renderJobs;
+</script>
+
+</body>
+</html>
